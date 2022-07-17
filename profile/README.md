@@ -20,3 +20,12 @@ https://github.com/Provenance-Emu/provenance-emu.github.io
 
 - Joe Mattiello https://github.com/JoeMatt
 - James Addyman https://github.com/jasarien
+
+## Links
+
+- Homepage https://provenance-emu.com
+- Patreon https://www.patreon.com/provenance
+- OpenCollective https://opencollective.com/provenanceemu
+- Twitter https://twitter.com/provenanceapp
+- YouTube https://www.youtube.com/channel/UCKeN6unYKdayfgLWulXgB1w
+
