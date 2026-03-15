@@ -7,7 +7,7 @@
 [![App Store](https://img.shields.io/badge/App_Store-Free-0D96F6?style=flat-square&logo=apple&logoColor=white)](https://apps.apple.com/us/app/provenance-app/id1596862805)
 [![GitHub Stars](https://img.shields.io/github/stars/Provenance-Emu/Provenance?style=flat-square&logo=github&color=FA3399)](https://github.com/Provenance-Emu/Provenance/stargazers)
 [![Discord](https://img.shields.io/discord/421819941761728512?style=flat-square&logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.gg/4TK7PU5)
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-8000CC?style=flat-square)](https://github.com/Provenance-Emu/Provenance/blob/develop/LICENSE.md)
+[![License](https://img.shields.io/badge/License-Provenance-8000CC?style=flat-square)](https://github.com/Provenance-Emu/Provenance/blob/develop/LICENSE.md)
 
 </div>
 
@@ -23,7 +23,7 @@ No jailbreak. No ads. No tracking. Just your games.
 
 **[→ Get it on the App Store](https://apps.apple.com/us/app/provenance-app/id1596862805)**
 **[→ AltStore / Sideload](https://provenance-emu.com/altstore)**
-**[→ Build from Source](https://wiki.provenance-emu.com/installation-and-usage/building-from-source)**
+**[→ Build from Source](https://wiki.provenance-emu.com/installation-and-usage/installing-provenance/building-from-source)**
 
 ---
 
@@ -56,7 +56,7 @@ No jailbreak. No ads. No tracking. Just your games.
 <td valign="top">
 
 **Sony & NEC**
-- PlayStation (PS1–PS3)
+- PlayStation (PS1)
 - PlayStation Portable
 - PC Engine / TurboGrafx-16
 - PC Engine CD · SuperGrafx
@@ -136,7 +136,7 @@ Contributions are welcome across all our repos:
 - 🐛 **Bug reports** → [GitHub Issues](https://github.com/Provenance-Emu/Provenance/issues)
 - 🎨 **Submit a skin** → [provenance-emu.com/skins/submit.html](https://provenance-emu.com/skins/submit.html)
 - 📝 **Improve the wiki** → [github.com/Provenance-Emu/wiki](https://github.com/Provenance-Emu/wiki)
-- 💻 **Code contributions** → See [CONTRIBUTING.md](https://github.com/Provenance-Emu/Provenance/blob/develop/CONTRIBUTING.md)
+- 💻 **Code contributions** → Fork the [main repo](https://github.com/Provenance-Emu/Provenance) and open a PR against `develop`
 
 ---
 
