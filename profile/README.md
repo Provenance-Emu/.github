@@ -22,7 +22,7 @@ No jailbreak. No ads. No tracking. Just your games.
 ```
 
 **[→ Get it on the App Store](https://apps.apple.com/us/app/provenance-app/id1596862805)**
-**[→ AltStore / Sideload](https://provenance-emu.com/altstore)**
+**[→ AltStore / Sideload](https://provenance-emu.com/install/)**
 **[→ Build from Source](https://wiki.provenance-emu.com/installation-and-usage/installing-provenance/building-from-source)**
 
 ---
