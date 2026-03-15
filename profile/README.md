@@ -57,7 +57,7 @@ No jailbreak. No ads. No tracking. Just your games.
 
 **Sony & NEC**
 - PlayStation (PS1)
-- PlayStation 2 ⚠️ (Play! — experimental)
+- PlayStation 2 ⚠️ (Play! — requires JIT)
 - PlayStation Portable
 - PC Engine / TurboGrafx-16
 - PC Engine CD · SuperGrafx
