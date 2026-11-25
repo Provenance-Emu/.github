@@ -55,6 +55,14 @@ let libraryType: Product.Library.LibraryType? = environment["PV_XCFRAMEWORK_BUIL
 - `targets:` is `buildFromSource ? sourceTargets : binaryTargets`. Product names are the
   same in both modes, so consumers change nothing.
 
+## Which Xcode builds a release
+
+Xcode 26.3, the oldest Xcode the apps build with. A `.swiftinterface` loads in the
+compiler that wrote it or a newer one; Xcode 27 writes module selectors (`Module::Type`)
+that Xcode 26 cannot read. The first releases cut by this workflow (PVSystems 1.0.2,
+PVSyncRules 1.0.3, PVHelp 1.0.1, PVLibrarySnapshot 1.0.1, PVWebServer 1.3.4) were built
+with Xcode 27 and are superseded; do not pin them.
+
 ## Rules for the code
 
 - **Every public enum is `@frozen`.** The frameworks are built with library evolution, and

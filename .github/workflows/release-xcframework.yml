@@ -34,7 +34,12 @@ env:
 
 jobs:
   build:
-    runs-on: xcode-27
+    # A Swift interface loads in the compiler that wrote it or a newer one, so build with
+    # the oldest Xcode the apps use. Xcode 27 writes module selectors (`Module::Type`)
+    # that Xcode 26 cannot read.
+    runs-on: macos-26
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
     outputs:
       sha: ${{ steps.source.outputs.sha }}
     steps:
@@ -57,6 +62,7 @@ jobs:
           persist-credentials: false
       - id: source
         run: echo "sha=$(git -C package rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - run: xcodebuild -version
       - name: Build XCFrameworks
         shell: bash
         run: |
