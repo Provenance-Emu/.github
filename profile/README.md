@@ -114,7 +114,7 @@ No jailbreak. No ads. No tracking. Just your games.
 
 ### Shared Swift Packages
 
-The parts Provenance, [iFly](https://ifly-emu.com) and [iCube](https://icube-emu.com) have in common, each a standalone Swift package any emulator frontend can use. [Developer docs →](https://wiki.provenance-emu.com/help/shared-frameworks)
+The parts Provenance, [iFly](https://ifly-emu.com) and [iCube](https://icube-emu.com) have in common, each a standalone Swift package any emulator frontend can use. Version tags resolve to prebuilt XCFrameworks. [Developer docs →](https://wiki.provenance-emu.com/help/shared-frameworks)
 
 | Package | What it does | Used by | Platforms | Latest |
 |---------|--------------|---------|-----------|--------|
@@ -132,6 +132,7 @@ The parts Provenance, [iFly](https://ifly-emu.com) and [iCube](https://icube-emu
 | [PVCloudSync](https://github.com/Provenance-Emu/PVCloudSync) | CloudKit sync of user files: scanning, planning, conflict resolution, tombstones, a local trash, retry policy and a CloudKit provider. | iCube | iOS 17, tvOS 17, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVCloudSync?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
 | [PVContinuity](https://github.com/Provenance-Emu/PVContinuity) | Nearby library discovery, trust, manifests and file transfer between devices on the same network. | iCube | iOS 17, tvOS 17, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVContinuity?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
 | [ContinuityKit](https://github.com/Provenance-Emu/ContinuityKit) | Cross-device "continue this game" handoff: manifests, transfer, Bonjour discovery, library browse. A different API and wire protocol from PVContinuity. | iFly | iOS 16, tvOS 16, macOS 13, watchOS 9, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/ContinuityKit?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVDependencies](https://github.com/Provenance-Emu/PVDependencies) | Prebuilt XCFrameworks of the third-party libraries the apps and packages share (SQLite.swift, ZIPFoundation): one copy per app, never compiled. | Provenance, iFly, iCube | iOS, tvOS, macOS, watchOS, visionOS | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVDependencies?style=flat-square&label=&color=8000CC&sort=semver) |
 
 ### Languages
 

@@ -93,18 +93,26 @@ with Xcode 27 and are superseded; do not pin them.
 
 Binary from these versions on: PVSystems 1.0.3, PVSyncRules 1.0.4, PVLibrarySnapshot 1.0.2,
 PVHelp 1.0.2, PVWebServer 1.3.5, PVPatchEngine 1.0.2, PVRemoteLibrary 0.3.1,
-PVCloudSync 1.1.1, PVContinuity 1.0.1, ContinuityKit 1.0.2. GamepadKit has the manifest
-and workflow but no binary release yet.
+PVCloudSync 1.1.1, PVContinuity 1.0.1, ContinuityKit 1.0.2, PVLookup 1.1.0, SkinKit 0.8.0.
+GamepadKit has the manifest and workflow but no binary release yet.
 
-Still source:
+Still source: **PVWidgets.** Its widget configuration intent does not survive a Swift
+interface: the `@Parameter` property wrapper is printed without its arguments and fails
+to compile.
 
-- **PVWidgets.** Its widget configuration intent does not survive a Swift interface: the
-  `@Parameter` property wrapper is printed without its arguments and fails to compile.
-- **SkinKit** and **PVLookup.** Several of their modules share one third-party library
-  (ZIPFoundation; SQLite.swift and Lighter) and expose its types to each other. As
-  frameworks each module would embed its own copy. Shipping the library as a shared
-  framework collides with the copy the apps build from source. SkinKit still publishes
-  static XCFrameworks with its own workflow; nothing resolves to them.
+## Third-party libraries
 
-A package may link a third-party library privately (ContinuityKit and ZIPFoundation) when
-exactly one of its modules uses it and it is an `internal import`.
+A library that several modules use, or that the apps use too, comes from
+[PVDependencies](https://github.com/Provenance-Emu/PVDependencies): prebuilt SQLite.swift
+and ZIPFoundation, one copy for the app and every package. PVLookup and SkinKit depend
+on it, in source mode as well.
+
+- **One source per library.** A graph cannot hold PVDependencies' `ZIPFoundation` and the
+  upstream package at once (two modules of one name). An app that uses PVLookup or
+  SkinKit takes these libraries from PVDependencies too.
+- **A library used by one module** may instead be an `internal import`, linked inside
+  that module's framework and absent from its interface: Lighter and swift-crypto in
+  PVLookup, ZIPFoundation in ContinuityKit. It must compile with library evolution,
+  because the whole build does (Lighter needed 1.0.1 for that).
+- **Helpers shared between a package's modules** are `@_spi(<Package>) public`, not
+  `package`: see PVLookup.
