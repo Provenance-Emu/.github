@@ -64,6 +64,23 @@ let libraryType: Product.Library.LibraryType? = environment["PV_XCFRAMEWORK_BUIL
 - **No type named after its module** in new packages; it breaks qualified names in Swift
   interfaces.
 
+## Packages with several modules or dependencies
+
+- List `modules` in dependency order. The build script leaves each finished framework in
+  `.xcframework-build/` and names it in `PV_XCFRAMEWORK_PREBUILT`; the manifest turns a
+  named module into a `binaryTarget(path:)`, so the next module links it instead of
+  compiling it in a second time. PVRemoteLibrary's `Package.swift` is the model.
+- A target names every package its imports' interfaces import, not only its own imports:
+  a prebuilt framework does not pass its dependencies on.
+- A binary target cannot declare dependencies. In a release, an empty source target
+  (`Sources/BinaryDependencies`) carries the packages the frameworks link against, and
+  each product lists it.
+- A dependency on another shared package must be on a version that has a binary release,
+  or its code is linked into the framework statically.
+- `package` access cannot cross modules: each framework is compiled under its own
+  package name, because Swift will not load a prebuilt module that claims the importing
+  code's package.
+
 ## Not converted yet
 
 Packages that depend on another package need their dependencies to be binary first, or

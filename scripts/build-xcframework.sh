@@ -7,6 +7,15 @@
 # (device and simulator), with the Swift interface and the module's resource bundle.
 # The package's manifest must make its library products dynamic when
 # PV_XCFRAMEWORK_BUILD is set; see docs/xcframework-releases.md.
+#
+# Modules are built in the order given. Each finished one is left in
+# <package dir>/.xcframework-build and named in PV_XCFRAMEWORK_PREBUILT, so a manifest
+# can hand it to the modules after it as a binary target. List a module after the
+# modules it imports, or their code is linked into it a second time.
+#
+# Each module is compiled under its own package name: Swift will not load a prebuilt
+# module that claims the package of the code importing it. `package` access therefore
+# cannot cross modules in a released package.
 set -euo pipefail
 
 package_dir="$(cd "$1" && pwd)"
@@ -39,7 +48,10 @@ if [[ -n "${PV_XCFRAMEWORK_PLATFORMS:-}" ]]; then
 fi
 
 scratch="$(mktemp -d)"
-trap 'rm -rf "$scratch"' EXIT
+prebuilt_dir="$package_dir/.xcframework-build"
+rm -rf "$prebuilt_dir"
+trap 'rm -rf "$scratch" "$prebuilt_dir"' EXIT
+export PV_XCFRAMEWORK_PREBUILT=""
 
 for module in "${modules[@]}"; do
     framework_args=()
@@ -49,7 +61,8 @@ for module in "${modules[@]}"; do
             -destination "generic/platform=$platform" \
             -archivePath "$slice/archive" -derivedDataPath "$slice/derived" \
             -skipPackagePluginValidation -skipMacroValidation \
-            SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES CODE_SIGNING_ALLOWED=NO
+            SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES CODE_SIGNING_ALLOWED=NO \
+            SWIFT_PACKAGE_NAME="${module}_xcframework"
 
         framework="$(find "$slice/archive.xcarchive/Products" -name "$module.framework" -print -quit)"
         products="$slice/derived/Build/Intermediates.noindex/ArchiveIntermediates/$module/BuildProductsPath"
@@ -87,4 +100,8 @@ for module in "${modules[@]}"; do
     ditto -c -k --norsrc --noextattr --keepParent "$scratch/$module.xcframework" "$output/$module.xcframework.zip"
     xcrun swift package compute-checksum "$output/$module.xcframework.zip" > "$output/$module.xcframework.zip.sha256"
     echo "$module: $(cat "$output/$module.xcframework.zip.sha256")"
+
+    mkdir -p "$prebuilt_dir"
+    ditto "$scratch/$module.xcframework" "$prebuilt_dir/$module.xcframework"
+    PV_XCFRAMEWORK_PREBUILT="${PV_XCFRAMEWORK_PREBUILT:+$PV_XCFRAMEWORK_PREBUILT }$module"
 done
