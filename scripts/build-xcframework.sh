@@ -13,6 +13,9 @@
 # can hand it to the modules after it as a binary target. List a module after the
 # modules it imports, or their code is linked into it a second time.
 #
+# Interfaces name modules through aliases, so a module that declares a type of its own
+# name (PVWebServer) still reads in compilers before Swift 6.3.
+#
 # Each module is compiled under its own package name: Swift will not load a prebuilt
 # module that claims the package of the code importing it. `package` access therefore
 # cannot cross modules in a released package.
@@ -62,7 +65,8 @@ for module in "${modules[@]}"; do
             -archivePath "$slice/archive" -derivedDataPath "$slice/derived" \
             -skipPackagePluginValidation -skipMacroValidation \
             SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES CODE_SIGNING_ALLOWED=NO \
-            SWIFT_PACKAGE_NAME="${module}_xcframework"
+            SWIFT_PACKAGE_NAME="${module}_xcframework" \
+            OTHER_SWIFT_FLAGS='$(inherited) -Xfrontend -alias-module-names-in-module-interface'
 
         framework="$(find "$slice/archive.xcarchive/Products" -name "$module.framework" -print -quit)"
         products="$slice/derived/Build/Intermediates.noindex/ArchiveIntermediates/$module/BuildProductsPath"
