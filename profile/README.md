@@ -106,9 +106,49 @@ No jailbreak. No ads. No tracking. Just your games.
 | Repo | Description |
 |------|-------------|
 | [Provenance](https://github.com/Provenance-Emu/Provenance) | Main iOS/tvOS app — Swift, UIKit, SwiftUI |
+| [iCube](https://github.com/Provenance-Emu/iCube) | GameCube and Wii emulator for iPhone, iPad and Apple TV at [icube-emu.com](https://icube-emu.com) |
+| [emulator-content-server](https://github.com/Provenance-Emu/emulator-content-server) | Headless library server for ROMs, saves, artwork and BIOS |
 | [wiki](https://github.com/Provenance-Emu/wiki) | Documentation at [wiki.provenance-emu.com](https://wiki.provenance-emu.com) |
 | [skins](https://github.com/Provenance-Emu/skins) | Community skin catalog at [provenance-emu.com/skins](https://provenance-emu.com/skins/) |
 | [provenance-emu.github.io](https://github.com/Provenance-Emu/provenance-emu.github.io) | Main website at [provenance-emu.com](https://provenance-emu.com) |
+
+### Shared Swift Packages
+
+The parts Provenance, [iFly](https://ifly-emu.com) and [iCube](https://icube-emu.com) have in common, each a standalone Swift package any emulator frontend can use. [Developer docs →](https://wiki.provenance-emu.com/help/shared-frameworks)
+
+| Package | What it does | Used by | Platforms | Latest |
+|---------|--------------|---------|-----------|--------|
+| [SkinKit](https://github.com/Provenance-Emu/SkinKit) | Controller skins: `.deltaskin` / `.manicskin` parsing, the Format 2 renderer, the skin manager and store browser, RetroArch overlay import, and the TV bezels around the picture (`SkinKitBezels`). | Provenance, iFly, iCube | iOS 17, tvOS 17, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/SkinKit?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [GamepadKit](https://github.com/Provenance-Emu/GamepadKit) | Controller handling: element-name mapping, positional fallback for plain HID pads, pad family detection, pause triggers, and a synthesized extended gamepad for pads iOS exposes without one (Switch Online SNES / N64 / Mega Drive, generic USB and Bluetooth pads). | Adoption in progress (`0.1.0`) | iOS 17.4, tvOS 17.4, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/GamepadKit?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVSystems](https://github.com/Provenance-Emu/PVSystems) | `SystemIdentifier` and per-system metadata: TheGamesDB / libretrodb / OpenVGDB IDs, RetroAchievements console IDs, the per-game BIOS manifest. | Provenance, iFly | iOS 17, tvOS 17, macOS 14, watchOS 9, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVSystems?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVLookup](https://github.com/Provenance-Emu/PVLookup) | Game metadata, artwork and cheat lookup over libretrodb, OpenVGDB, TheGamesDB, ShiraGame and the libretro cheat database. Ships no database bytes; they are release assets fetched at build time. | Provenance, iFly | iOS 17, tvOS 17, macOS 14, watchOS 9, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVLookup?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVPatchEngine](https://github.com/Provenance-Emu/PVPatchEngine) | Streaming ROM and disc patch engine: IPS, BPS, UPS, PPF and xdelta3, with bounded memory and 64-bit offsets. C core, Swift API. | Provenance, iFly, iCube | iOS 17, tvOS 17, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVPatchEngine?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVWebServer](https://github.com/Provenance-Emu/PVWebServer) | HTTP and WebDAV server on one port, built on Network.framework, with a route registry. Powers the in-app file manager and uploads. | Provenance, iCube | iOS 17, tvOS 17, macOS 11, watchOS 9, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVWebServer?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVWidgets](https://github.com/Provenance-Emu/PVWidgets) | Home screen game widgets: grid and list drawn from the widget's real size, the Show and Layout options, cover decoding. | Provenance, iFly, iCube | iOS 17, tvOS 17, macOS 14, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVWidgets?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVLibrarySnapshot](https://github.com/Provenance-Emu/PVLibrarySnapshot) | The App Group snapshot and cover JPEGs an app writes for its extensions; the tvOS Top Shelf reads it. | Provenance, iCube | iOS 17, tvOS 17, macOS 14, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVLibrarySnapshot?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVHelp](https://github.com/Provenance-Emu/PVHelp) | In-app help from a GitBook wiki repo: navigation, page fetch and cache, GitBook preprocessing, offline fallback. | Provenance, iCube | iOS 17, tvOS 17, macOS 14, watchOS 9, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVHelp?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVRemoteLibrary](https://github.com/Provenance-Emu/PVRemoteLibrary) | One model of "a game somewhere": on this device, on an emulator content server, on a RomM share or on a nearby peer. Matching, merged library rows, an on-disk catalogue and cover cache. | Provenance | iOS 17, tvOS 17, macOS 14, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVRemoteLibrary?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVSyncRules](https://github.com/Provenance-Emu/PVSyncRules) | What an emulator app syncs: `SyncClassifier` (save state, battery save, ROM, BIOS), `SyncableFileType`, `SyncPolicy`. Pure value types, no I/O. | iCube | iOS 17, tvOS 17, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVSyncRules?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVCloudSync](https://github.com/Provenance-Emu/PVCloudSync) | CloudKit sync of user files: scanning, planning, conflict resolution, tombstones, a local trash, retry policy and a CloudKit provider. | iCube | iOS 17, tvOS 17, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVCloudSync?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [PVContinuity](https://github.com/Provenance-Emu/PVContinuity) | Nearby library discovery, trust, manifests and file transfer between devices on the same network. | iCube | iOS 17, tvOS 17, macOS 14 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/PVContinuity?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+| [ContinuityKit](https://github.com/Provenance-Emu/ContinuityKit) | Cross-device "continue this game" handoff: manifests, transfer, Bonjour discovery, library browse. A different API and wire protocol from PVContinuity. | iFly | iOS 16, tvOS 16, macOS 13, watchOS 9, visionOS 1 | ![tag](https://img.shields.io/github/v/tag/Provenance-Emu/ContinuityKit?style=flat-square&label=&color=8000CC&filter=!databases-*&sort=semver) |
+
+### Languages
+
+| Language | What we write in it | Where |
+|----------|---------------------|-------|
+| Swift | The apps, SwiftUI and UIKit interfaces, every shared package, widgets, App Intents, build tools | [Provenance](https://github.com/Provenance-Emu/Provenance), [iCube](https://github.com/Provenance-Emu/iCube), all shared packages |
+| Objective-C / Objective-C++ | The bridge between Swift and each emulator core, controller input mapping | [Provenance](https://github.com/Provenance-Emu/Provenance) `Cores/`, [Core-VirtualJaguar](https://github.com/Provenance-Emu/Core-VirtualJaguar) |
+| C / C++ | Emulator core forks and patches (Dolphin, Azahar, Virtual Jaguar, Flycast), the libretro frontend, the patch engine | [iCube](https://github.com/Provenance-Emu/iCube), [PVPatchEngine](https://github.com/Provenance-Emu/PVPatchEngine), [Provenance](https://github.com/Provenance-Emu/Provenance) |
+| Metal Shading Language / GLSL | CRT, LCD and VHS video filters, the slang shader runtime | [Provenance](https://github.com/Provenance-Emu/Provenance) `PVShaders` |
+| TypeScript | The library server and its clients, the iCube and iFly websites (Next.js) | [emulator-content-server](https://github.com/Provenance-Emu/emulator-content-server), [icube-emu.github.io](https://github.com/Provenance-Emu/icube-emu.github.io), [ifly-emu.github.io](https://github.com/Provenance-Emu/ifly-emu.github.io) |
+| Svelte | The library server web interface | [emulator-content-server](https://github.com/Provenance-Emu/emulator-content-server) |
+| Rust | Parts of the library server | [emulator-content-server](https://github.com/Provenance-Emu/emulator-content-server) |
+| Python | The skin catalog pipeline, database generators, build and maintenance scripts | [skins](https://github.com/Provenance-Emu/skins), [PVLookup](https://github.com/Provenance-Emu/PVLookup), [Provenance](https://github.com/Provenance-Emu/Provenance) `Scripts/` |
+| Shell | Build, release and XCFramework packaging scripts | every repo |
+| Ruby | fastlane lanes, the Homebrew cask | [Provenance](https://github.com/Provenance-Emu/Provenance), [homebrew-virtualjaguar](https://github.com/Provenance-Emu/homebrew-virtualjaguar) |
+| CMake / Make | Native core builds for iOS and tvOS | [Provenance](https://github.com/Provenance-Emu/Provenance), [iCube](https://github.com/Provenance-Emu/iCube) |
+| HTML / CSS / SCSS / JavaScript | The websites (Hugo), the in-app file manager page | [provenance-emu.github.io](https://github.com/Provenance-Emu/provenance-emu.github.io), [PVWebServer](https://github.com/Provenance-Emu/PVWebServer) |
 
 ### Emulation Cores
 | Repo | System(s) |
