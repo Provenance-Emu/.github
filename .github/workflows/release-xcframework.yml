@@ -1,0 +1,114 @@
+name: Release XCFramework (reusable)
+
+# Cuts a release of a shared Swift package: builds one XCFramework per module, then
+# tags a commit whose Package.swift points at them. See docs/xcframework-releases.md.
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Version to release (major.minor.patch)
+        required: true
+        type: string
+      ref:
+        description: Branch or commit to release
+        required: true
+        type: string
+      dry_run:
+        description: Build and check only; tag and publish nothing
+        required: true
+        type: boolean
+      modules:
+        description: Space-separated module names, one XCFramework each
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: xcframework-release-${{ github.repository }}-${{ inputs.version }}
+
+env:
+  VERSION: ${{ inputs.version }}
+  MODULES: ${{ inputs.modules }}
+
+jobs:
+  build:
+    runs-on: xcode-27
+    outputs:
+      sha: ${{ steps.source.outputs.sha }}
+    steps:
+      - name: Validate version
+        shell: bash
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Expected a version in major.minor.patch form" >&2
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          path: package
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Provenance-Emu/.github
+          path: tools
+          persist-credentials: false
+      - id: source
+        run: echo "sha=$(git -C package rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Build XCFrameworks
+        shell: bash
+        run: |
+          read -r -a modules <<<"$MODULES"
+          tools/scripts/build-xcframework.sh package dist "${modules[@]}"
+      - name: Check the binary manifest resolves
+        shell: bash
+        run: |
+          tools/scripts/set-binary-release.sh package/Package.swift "$VERSION" dist
+          cd package && xcrun swift package dump-package > /dev/null
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xcframeworks
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.sha }}
+          path: package
+      - uses: actions/checkout@v4
+        with:
+          repository: Provenance-Emu/.github
+          path: tools
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: xcframeworks
+          path: dist
+      - name: Tag a commit that points at the binaries
+        shell: bash
+        run: |
+          cd package
+          if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" > /dev/null; then
+            echo "Tag $VERSION already exists" >&2
+            exit 1
+          fi
+          ../tools/scripts/set-binary-release.sh Package.swift "$VERSION" ../dist
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "release: $VERSION" Package.swift
+          git tag "$VERSION"
+          git push origin "refs/tags/$VERSION"
+      - name: Publish assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release create "$VERSION" dist/* --verify-tag --generate-notes
