@@ -45,6 +45,11 @@ while read -r platform; do
         *) echo "Unknown platform in manifest: $platform" >&2; exit 1 ;;
     esac
 done < <(jq -r '.platforms[].platformName' <<<"$manifest")
+# Mac Catalyst comes with iOS: a source package that declares iOS builds for Catalyst
+# whether or not its manifest lists it, and apps with a Catalyst target rely on that.
+if [[ " ${destinations[*]} " == *" iOS "* && " ${destinations[*]} " != *"Mac Catalyst"* ]]; then
+    destinations+=('macOS,variant=Mac Catalyst')
+fi
 # PV_XCFRAMEWORK_PLATFORMS narrows the list for a quick local check, e.g. "iOS Simulator".
 if [[ -n "${PV_XCFRAMEWORK_PLATFORMS:-}" ]]; then
     IFS='|' read -r -a destinations <<<"$PV_XCFRAMEWORK_PLATFORMS"

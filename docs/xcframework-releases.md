@@ -23,7 +23,8 @@ Run **Release XCFramework** from the package's Actions tab with the new version
 (`dry_run` builds and checks without tagging). Each package's `release.yml` calls
 [`release-xcframework.yml`](../.github/workflows/release-xcframework.yml) here, which:
 
-1. builds one dynamic framework per module and per platform the manifest declares
+1. builds one dynamic framework per module and per platform the manifest declares (plus
+   Mac Catalyst whenever iOS is declared)
    ([`scripts/build-xcframework.sh`](../scripts/build-xcframework.sh)), with the Swift
    interface and the module's resource bundle inside;
 2. writes the version and checksums into `Package.swift`
