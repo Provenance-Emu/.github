@@ -89,15 +89,22 @@ with Xcode 27 and are superseded; do not pin them.
   package name, because Swift will not load a prebuilt module that claims the importing
   code's package.
 
-## Not converted yet
+## State of each package
 
-Packages that depend on another package need their dependencies to be binary first, or
-the dependency is linked into the framework a second time:
+Binary from these versions on: PVSystems 1.0.3, PVSyncRules 1.0.4, PVLibrarySnapshot 1.0.2,
+PVHelp 1.0.2, PVWebServer 1.3.5, PVPatchEngine 1.0.2, PVRemoteLibrary 0.3.1,
+PVCloudSync 1.1.1, PVContinuity 1.0.1, ContinuityKit 1.0.2. GamepadKit has the manifest
+and workflow but no binary release yet.
 
-- on another shared package: PVRemoteLibrary, PVCloudSync, PVContinuity;
-- on third-party packages (ZIPFoundation, SQLite.swift, swift-crypto): PVLookup,
-  ContinuityKit, SkinKit (which publishes XCFrameworks but still resolves from source);
-- several modules that depend on each other: GamepadKit, PVWidgets, PVPatchEngine (C core).
+Still source:
 
-PVWebServer follows the same rule with its own script and a single-checksum
-`binaryRelease`.
+- **PVWidgets.** Its widget configuration intent does not survive a Swift interface: the
+  `@Parameter` property wrapper is printed without its arguments and fails to compile.
+- **SkinKit** and **PVLookup.** Several of their modules share one third-party library
+  (ZIPFoundation; SQLite.swift and Lighter) and expose its types to each other. As
+  frameworks each module would embed its own copy. Shipping the library as a shared
+  framework collides with the copy the apps build from source. SkinKit still publishes
+  static XCFrameworks with its own workflow; nothing resolves to them.
+
+A package may link a third-party library privately (ContinuityKit and ZIPFoundation) when
+exactly one of its modules uses it and it is an `internal import`.
