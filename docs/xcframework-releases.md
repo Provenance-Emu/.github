@@ -117,3 +117,20 @@ on it, in source mode as well.
   because the whole build does (Lighter needed 1.0.1 for that).
 - **Helpers shared between a package's modules** are `@_spi(<Package>) public`, not
   `package`: see PVLookup.
+
+## Keeping the apps and the wiki current
+
+Nothing has to be bumped by hand after a release:
+
+- **Apps.** Each app has an `update-shared-packages.yml` workflow (hourly, and by hand). It
+  runs [`scripts/bump-shared-packages.py`](../scripts/bump-shared-packages.py), which raises
+  every Provenance-Emu package the app names to its latest released version, in manifests,
+  Xcode package references and lock files, and opens or updates one pull request
+  (`deps/shared-packages`). A new major version is listed in the PR, not applied.
+- **Wiki.** `sync-shared-frameworks.yml` in the wiki repo regenerates the
+  [Shared Frameworks](https://wiki.provenance-emu.com/help/shared-frameworks) page from the
+  package repositories.
+
+Both poll, so they need no cross-repository token. A pull request opened with the default
+Actions token does not start other workflows; set a `SHARED_PACKAGES_TOKEN` secret (a
+token that may push and open pull requests) in an app repository to get CI on those PRs.
