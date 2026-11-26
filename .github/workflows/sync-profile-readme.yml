@@ -1,0 +1,37 @@
+name: Sync profile README
+
+# Keeps the shared-packages table in profile/README.md current: versions, release
+# dates, platforms and topics are read from each package's repository.
+on:
+  schedule:
+    - cron: '45 7 * * *'   # daily, after the wiki's own sync at 07:30 UTC
+  repository_dispatch:
+    types: [shared-package-released]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-profile-readme
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/sync-profile-readme.py
+      - name: Commit and push
+        run: |
+          if git diff --quiet profile/README.md; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: sync the shared-packages table" profile/README.md
+          git push
